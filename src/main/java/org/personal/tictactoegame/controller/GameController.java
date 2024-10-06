@@ -3,7 +3,9 @@ package org.personal.tictactoegame.controller;
 import java.util.List;
 
 import org.personal.tictactoegame.exceptions.InvalidPlayerException;
+import org.personal.tictactoegame.exceptions.SymbolAlreadyExistsException;
 import org.personal.tictactoegame.models.Game;
+import org.personal.tictactoegame.models.GameState;
 import org.personal.tictactoegame.models.Player;
 import org.personal.tictactoegame.service.GameService;
 import org.personal.tictactoegame.winningStrategies.WinningStrategy;
@@ -27,7 +29,11 @@ public class GameController {
         return gameService.createGame(boardSize, players, winningStrategies);
     }
 
-    public void makeMove(Game game) {
+    public void makeMove(Game game) throws SymbolAlreadyExistsException {
         gameService.makeMove(game);
+    }
+
+    public void startGame(final Game game) {
+        game.setGameState(GameState.IN_PROGRESS);
     }
 }
