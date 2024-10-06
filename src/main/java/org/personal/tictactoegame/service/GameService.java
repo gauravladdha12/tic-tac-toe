@@ -74,13 +74,13 @@ public class GameService {
         }
         cell.setSymbol(moveCell.getSymbol());
 
-        changeGameState(game, currentPlayer);
+        changeGameState(game, currentPlayer, cell);
     }
 
-    public void changeGameState(final Game game, final Player player) {
+    public void changeGameState(final Game game, final Player player, final Cell cell) {
         List<WinningStrategy> winningStrategies = game.getWinningStrategies();
         for (WinningStrategy winningStrategy : winningStrategies) {
-            if (winningStrategy.isPlayerWon(game.getBoard(), player)) {
+            if (winningStrategy.isPlayerWon(game.getBoard(), player, cell)) {
                 game.setGameState(GameState.WIN);
                 game.setWinner(player);
                 break;
