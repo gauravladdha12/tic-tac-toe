@@ -8,7 +8,7 @@ public class BotPlayer extends Player {
     DifficultyLevel difficultyLevel;
 
     @Override
-    Move getNextMove(Board board) {
+    public Move getNextMove(Board board) {
         return null;
     }
 }

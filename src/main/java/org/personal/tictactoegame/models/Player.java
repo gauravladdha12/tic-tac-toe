@@ -11,5 +11,5 @@ public abstract class Player {
     Symbol symbol;
     PlayerType playerType;
 
-    abstract Move getNextMove(Board board);
+    public abstract Move getNextMove(Board board);
 }

@@ -7,8 +7,9 @@ import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class HumanPlayer extends Player {
+
     @Override
-    Move getNextMove(Board board) {
+    public Move getNextMove(Board board) {
         // get input from a client
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter row number starting 1");
