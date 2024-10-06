@@ -61,7 +61,7 @@ public class GameService {
         }
 
         Board board = game.getBoard();
-        Player currentPlayer = game.getNextPlayer();
+        Player currentPlayer = game.setAndGetNextPlayer();
 
         Move move = currentPlayer.getNextMove(board);
         game.getMoves().add(move);
@@ -71,7 +71,7 @@ public class GameService {
         Cell cell = cells.get(moveCell.getRow()).get(moveCell.getColumn());
         if (cell.getSymbol() != null) {
             // undo current player
-            game.getPreviousPlayer();
+            game.setAndGetPreviousPlayer();
             throw new SymbolAlreadyExistsException("Given place already have a symbol " + cell.getSymbol().getValue());
         }
         cell.setSymbol(moveCell.getSymbol());

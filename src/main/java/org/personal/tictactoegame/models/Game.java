@@ -21,7 +21,7 @@ public class Game {
     Player winner;
     Integer currentPlayerIndex;
 
-    public Player getNextPlayer() {
+    public Player setAndGetNextPlayer() {
         if (currentPlayerIndex == null) {
             currentPlayerIndex = 0;
         } else {
@@ -31,7 +31,7 @@ public class Game {
         return players.get(currentPlayerIndex);
     }
 
-    public Player getPreviousPlayer() {
+    public Player setAndGetPreviousPlayer() {
         if (currentPlayerIndex == null) {
             currentPlayerIndex = 0;
         } else {
