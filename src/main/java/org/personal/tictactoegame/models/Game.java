@@ -30,4 +30,14 @@ public class Game {
         }
         return players.get(currentPlayerIndex);
     }
+
+    public Player getPreviousPlayer() {
+        if (currentPlayerIndex == null) {
+            currentPlayerIndex = 0;
+        } else {
+            currentPlayerIndex = currentPlayerIndex - 1;
+            currentPlayerIndex = (currentPlayerIndex % players.size() + players.size()) % players.size();
+        }
+        return players.get(currentPlayerIndex);
+    }
 }

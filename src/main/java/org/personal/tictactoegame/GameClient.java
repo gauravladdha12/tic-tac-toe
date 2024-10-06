@@ -6,6 +6,8 @@ import java.util.List;
 import org.personal.tictactoegame.controller.GameController;
 import org.personal.tictactoegame.exceptions.InvalidPlayerException;
 import org.personal.tictactoegame.exceptions.SymbolAlreadyExistsException;
+import org.personal.tictactoegame.models.BotPlayer;
+import org.personal.tictactoegame.models.DifficultyLevel;
 import org.personal.tictactoegame.models.Game;
 import org.personal.tictactoegame.models.GameState;
 import org.personal.tictactoegame.models.HumanPlayer;
@@ -30,16 +32,22 @@ public class GameClient {
         this.diagonalWinningStrategy = new DiagonalWinningStrategy();
     }
 
-    public void startGame() throws InvalidPlayerException, SymbolAlreadyExistsException {
+    public void startGame() throws InvalidPlayerException {
         Player player1 = new HumanPlayer();
         player1.setPlayerType(PlayerType.HUMAN);
         player1.setName("Gaurav");
         player1.setSymbol(new Symbol("X"));
 
-        Player player2 = new HumanPlayer();
-        player2.setPlayerType(PlayerType.HUMAN);
-        player2.setName("Disha");
+        //        Player player2 = new HumanPlayer();
+        //        player2.setPlayerType(PlayerType.HUMAN);
+        //        player2.setName("Disha");
+        //        player2.setSymbol(new Symbol("O"));
+
+        BotPlayer player2 = new BotPlayer();
+        player2.setPlayerType(PlayerType.BOT);
+        player2.setName("BOT");
         player2.setSymbol(new Symbol("O"));
+        player2.setDifficultyLevel(DifficultyLevel.EASY);
 
         List<Player> players = Arrays.asList(player1, player2);
         List<WinningStrategy> winningStrategies = Arrays.asList(rowWinningStrategy, columnWinningStrategy, diagonalWinningStrategy);
@@ -49,8 +57,12 @@ public class GameClient {
         gameController.displayBoard(game);
 
         while (game.getGameState().equals(GameState.IN_PROGRESS)) {
-            gameController.makeMove(game);
-            gameController.displayBoard(game);
+            try {
+                gameController.makeMove(game);
+                gameController.displayBoard(game);
+            } catch (SymbolAlreadyExistsException symbolAlreadyExistsException) {
+                System.out.println("Invalid move " + symbolAlreadyExistsException.getMessage());
+            }
         }
 
         if (game.getGameState().equals(GameState.WIN)) {

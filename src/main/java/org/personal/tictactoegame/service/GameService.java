@@ -69,8 +69,10 @@ public class GameService {
         List<List<Cell>> cells = board.getCells();
         Cell moveCell = move.getCell();
         Cell cell = cells.get(moveCell.getRow()).get(moveCell.getColumn());
-        if(cell.getSymbol()!=null){
-            throw new SymbolAlreadyExistsException("Given place already have a symbol "+ cell.getSymbol().getValue());
+        if (cell.getSymbol() != null) {
+            // undo current player
+            game.getPreviousPlayer();
+            throw new SymbolAlreadyExistsException("Given place already have a symbol " + cell.getSymbol().getValue());
         }
         cell.setSymbol(moveCell.getSymbol());
 
