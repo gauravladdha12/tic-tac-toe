@@ -5,9 +5,11 @@ import java.util.List;
 import org.personal.tictactoegame.winningStrategies.WinningStrategy;
 
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Data
 public class Game {
     Board board;
     List<Player> players;
