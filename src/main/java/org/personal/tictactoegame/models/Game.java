@@ -15,4 +15,15 @@ public class Game {
     List<WinningStrategy> winningStrategies;
     GameState gameState;
     Player winner;
+    Integer currentPlayerIndex;
+
+    public Player getNextPlayer() {
+        if (currentPlayerIndex == null) {
+            currentPlayerIndex = 0;
+        } else {
+            currentPlayerIndex = currentPlayerIndex + 1;
+            currentPlayerIndex = currentPlayerIndex % players.size();
+        }
+        return players.get(currentPlayerIndex);
+    }
 }
