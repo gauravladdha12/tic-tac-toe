@@ -33,6 +33,10 @@ public class GameController {
         gameService.makeMove(game);
     }
 
+    public void undo(Game game) throws SymbolAlreadyExistsException {
+        gameService.undo(game);
+    }
+
     public void startGame(final Game game) {
         game.setGameState(GameState.IN_PROGRESS);
     }

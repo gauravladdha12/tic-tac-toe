@@ -7,8 +7,8 @@ import org.personal.tictactoegame.models.Cell;
 import org.personal.tictactoegame.models.Player;
 import org.personal.tictactoegame.models.Symbol;
 
-public class RowWinningStrategy implements WinningStrategy {
-    HashMap<Integer, HashMap<Symbol, Integer>> symbolCountMap = new HashMap<>();
+public class RowWinningStrategy implements O1WinningStrategy {
+    static HashMap<Integer, HashMap<Symbol, Integer>> symbolCountMap = new HashMap<>();
 
     @Override
     public boolean isPlayerWon(final Board board, final Player player, final Cell cell) {
@@ -18,5 +18,9 @@ public class RowWinningStrategy implements WinningStrategy {
         symbolCountMap.put(row, rowSymbolMap);
 
         return symbolCountMap.get(row).get(cell.getSymbol()) == board.getSize();
+    }
+
+    public void resetSymbolCountMap() {
+        symbolCountMap = new HashMap<>();
     }
 }

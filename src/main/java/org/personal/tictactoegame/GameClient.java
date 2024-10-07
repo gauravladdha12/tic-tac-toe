@@ -2,6 +2,7 @@ package org.personal.tictactoegame;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import org.personal.tictactoegame.controller.GameController;
 import org.personal.tictactoegame.exceptions.InvalidPlayerException;
@@ -56,9 +57,21 @@ public class GameClient {
         gameController.startGame(game);
         gameController.displayBoard(game);
 
+        Scanner sc = new Scanner(System.in);
+
         while (game.getGameState().equals(GameState.IN_PROGRESS)) {
             try {
-                gameController.makeMove(game);
+                System.out.println("Enter string Move or Undo");
+                String s = sc.nextLine();
+                if (s.equals("Move")) {
+                    System.out.println("Making move");
+                    gameController.makeMove(game);
+                } else if (s.equals("Undo")) {
+                    System.out.println("Doing undo");
+                    gameController.undo(game);
+                } else{
+                    System.out.println("unknown input");
+                }
                 gameController.displayBoard(game);
             } catch (SymbolAlreadyExistsException symbolAlreadyExistsException) {
                 System.out.println("Invalid move " + symbolAlreadyExistsException.getMessage());

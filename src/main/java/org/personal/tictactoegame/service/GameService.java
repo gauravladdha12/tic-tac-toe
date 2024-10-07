@@ -10,9 +10,19 @@ import org.personal.tictactoegame.models.Game;
 import org.personal.tictactoegame.models.GameState;
 import org.personal.tictactoegame.models.Move;
 import org.personal.tictactoegame.models.Player;
+import org.personal.tictactoegame.undoStrategies.RedoUndoStrategy;
+import org.personal.tictactoegame.undoStrategies.UndoStrategy;
 import org.personal.tictactoegame.winningStrategies.WinningStrategy;
 
 public class GameService {
+
+    MoveManager moveManager;
+    UndoStrategy undoStrategy;
+
+    public GameService() {
+        moveManager = new MoveManager();
+        undoStrategy = new RedoUndoStrategy();
+    }
 
     public void displayBoard(final Game game) {
         Board board = game.getBoard();
@@ -31,20 +41,9 @@ public class GameService {
     }
 
     public Game createGame(final int boardSize, final List<Player> players, final List<WinningStrategy> winningStrategies) {
-        List<List<Cell>> cells = new ArrayList<>();
-        for (int i = 0; i < boardSize; i++) {
-            List<Cell> columnCells = new ArrayList<>();
-            for (int j = 0; j < boardSize; j++) {
-                Cell cell = Cell.builder()
-                        .row(i).column(j).build();
-                columnCells.add(cell);
-            }
-            cells.add(columnCells);
-        }
-
-        Board board = Board.builder()
-                .cells(cells)
-                .size(boardSize).build();
+        Board board = new Board.builder()
+                .setSize(boardSize)
+                .build();
 
         return Game.builder()
                 .gameState(GameState.NOT_STARTED)
@@ -62,36 +61,19 @@ public class GameService {
 
         Board board = game.getBoard();
         Player currentPlayer = game.setAndGetNextPlayer();
-
         Move move = currentPlayer.getNextMove(board);
-        game.getMoves().add(move);
 
-        List<List<Cell>> cells = board.getCells();
-        Cell moveCell = move.getCell();
-        Cell cell = cells.get(moveCell.getRow()).get(moveCell.getColumn());
-        if (cell.getSymbol() != null) {
+        try {
+            moveManager.makeMove(game, move);
+        } catch (SymbolAlreadyExistsException e) {
             // undo current player
             game.setAndGetPreviousPlayer();
-            throw new SymbolAlreadyExistsException("Given place already have a symbol " + cell.getSymbol().getValue());
+            throw e;
         }
-        cell.setSymbol(moveCell.getSymbol());
-
-        changeGameState(game, currentPlayer, cell);
     }
 
-    public void changeGameState(final Game game, final Player player, final Cell cell) {
-        List<WinningStrategy> winningStrategies = game.getWinningStrategies();
-        for (WinningStrategy winningStrategy : winningStrategies) {
-            if (winningStrategy.isPlayerWon(game.getBoard(), player, cell)) {
-                game.setGameState(GameState.WIN);
-                game.setWinner(player);
-                break;
-            }
-        }
-
-        int boardSize = game.getBoard().getSize();
-        if (game.getMoves().size() == boardSize * boardSize) {
-            game.setGameState(GameState.DRAW);
-        }
+    public void undo(final Game game) throws SymbolAlreadyExistsException {
+        Game undo = undoStrategy.undo(game);
+        game.updateFrom(undo);
     }
 }
